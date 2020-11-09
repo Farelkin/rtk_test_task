@@ -1,0 +1,37 @@
+[mattermost]
+[mattermost.bridge_user1]
+NoTLS = true
+
+Server = "mm-1:8065"
+Login = "user1_host1"
+Password = "user1_password"
+
+Team = "rtk"
+
+RemoteNickFormat = "[{PROTOCOL}] <{NICK}>"
+PrefixMessagesWithNick = true
+
+#[mattermost.bridge_user2]
+#NoTLS = true
+#
+#Server = "mm-2:8065"
+#Login = "user1_host2"
+#Password = "user2_password"
+#
+#Team = "rtk"
+#
+#RemoteNickFormat = "[{PROTOCOL}] <{NICK}>"
+#PrefixMessagesWithNick = true
+
+
+[[gateway]]
+name = "mygateway"
+enable = true
+
+[[gateway.inout]]
+account = "mattermost.bridge_user1"
+channel = "off-topic"
+
+#[[gateway.inout]]
+#account = "mattermost.bridge_user2"
+#channel = "off-topic"
