@@ -1,0 +1,171 @@
+#This is configuration for matterbridge.
+#WARNING: as this file contains credentials, be sure to set correct file permissions
+#See https://github.com/42wim/matterbridge/wiki/How-to-create-your-config for how to create your config
+#See https://github.com/42wim/matterbridge/wiki/Settings for all settings
+
+###################################################################
+#mattermost section
+###################################################################
+[mattermost.test1]
+#The mattermost hostname. (do not prefix it with http or https)
+#REQUIRED (when not using webhooks)
+Server="172.17.0.3:8065"
+
+#Your team on mattermost.
+#REQUIRED (when not using webhooks)
+Team="test1"
+
+#login/pass of your bot.
+#Use a dedicated user for this and not your own!
+#REQUIRED (when not using webhooks)
+Login="test1"
+#Password="testtest"
+
+#personal access token of the bot.
+#new feature since mattermost 4.1. See https://docs.mattermost.com/developer/personal-access-tokens.html
+#OPTIONAL (you can use token instead of login/password)
+Token="xpnxk6h4ujys8nkcadqformm1o"
+
+#Enable this to make a http connection (instead of https) to your mattermost.
+#OPTIONAL (default false)
+NoTLS=true
+
+
+SkipTLSVerify=true
+
+RemoteNickFormat="[{BRIDGE}] {NICK}: "
+PrefixMessagesWithNick=true
+
+#WebhookURL="http://172.17.0.3:8065/hooks/34973yhzrjg85ctye4yzb86mxw"
+
+
+[mattermost.test2]
+#The mattermost hostname. (do not prefix it with http or https)
+#REQUIRED (when not using webhooks)
+Server="172.17.0.2:8065"
+
+#Your team on mattermost.
+#REQUIRED (when not using webhooks)
+Team="test2"
+
+#login/pass of your bot.
+#Use a dedicated user for this and not your own!
+#REQUIRED (when not using webhooks)
+Login="test2"
+#Password=""
+
+#personal access token of the bot.
+#new feature since mattermost 4.1. See https://docs.mattermost.com/developer/personal-access-tokens.html
+#OPTIONAL (you can use token instead of login/password)
+Token="94bdb6zp73dx5xcymobrg39azr"
+
+#Enable this to make a http connection (instead of https) to your mattermost.
+#OPTIONAL (default false)
+NoTLS=true
+
+SkipTLSVerify=true
+
+RemoteNickFormat="[{BRIDGE}] {NICK}: "
+PrefixMessagesWithNick=true
+
+#WebhookURL="http://172.17.0.2:8065/hooks/4ia3z3e5pfnd8giamwk1ynwnwy"
+
+###################################################################
+#General configuration
+###################################################################
+# Settings here are defaults that each protocol can override
+[general]
+
+## RELOADABLE SETTINGS
+## Settings below can be reloaded by editing the file
+
+#RemoteNickFormat defines how remote users appear on this bridge
+#The string "{NICK}" (case sensitive) will be replaced by the actual nick / username.
+#The string "{BRIDGE}" (case sensitive) will be replaced by the sending bridge
+#The string "{LABEL}" (case sensitive) will be replaced by label= field of the sending bridge
+#The string "{PROTOCOL}" (case sensitive) will be replaced by the protocol used by the bridge
+#The string "{GATEWAY}" (case sensitive) will be replaced by the origin gateway name that is replicating the message.
+#The string "{CHANNEL}" (case sensitive) will be replaced by the origin channel name used by the bridge
+#The string "{TENGO}" (case sensitive) will be replaced by the output of the RemoteNickFormat script under [tengo]
+#OPTIONAL (default empty)
+RemoteNickFormat="[{PROTOCOL}] <{NICK}> "
+
+#StripNick only allows alphanumerical nicks. See https://github.com/42wim/matterbridge/issues/285
+#It will strip other characters from the nick
+#OPTIONAL (default false)
+StripNick=false
+
+
+#MediaServerUpload (or MediaDownloadPath) and MediaServerDownload are used for uploading
+#images/files/video to a remote "mediaserver" (a webserver like caddy for example).
+#When configured images/files uploaded on bridges like mattermost, slack, telegram will be
+#downloaded and uploaded again to MediaServerUpload URL
+#MediaDownloadPath is the filesystem path where the media file will be placed, instead of uploaded,
+#for if Matterbridge has write access to the directory your webserver is serving.
+#It is an alternative to MediaServerUpload.
+#The MediaServerDownload will be used so that bridges without native uploading support:
+#gitter, irc and xmpp will be shown links to the files on MediaServerDownload
+#
+#More information https://github.com/42wim/matterbridge/wiki/Mediaserver-setup-%5Badvanced%5D
+#OPTIONAL (default empty)
+#MediaServerUpload="https://user:pass@yourserver.com/upload"
+#OPTIONAL (default empty)
+#MediaDownloadPath="/srv/http/yourserver.com/public/download"
+#OPTIONAL (default empty)
+#MediaServerDownload="https://youserver.com/download"
+
+#MediaDownloadSize is the maximum size of attachments, videos, images
+#matterbridge will download and upload this file to bridges that also support uploading files.
+#eg downloading from slack to upload it to mattermost
+#
+#It will only download from bridges that don't have public links available, which are for the moment
+#slack, telegram, matrix and mattermost
+#
+#OPTIONAL (default 1000000 (1 megabyte))
+#MediaDownloadSize=1000000
+
+#MediaDownloadBlacklist allows you to blacklist specific files from being downloaded.
+#Filenames matching these regexp will not be download/uploaded to the mediaserver
+#You can use regex for this, see https://regex-golang.appspot.com/assets/html/index.html for more regex info
+#OPTIONAL (default empty)
+#MediaDownloadBlacklist=[".html$",".htm$"]
+
+#IgnoreFailureOnStart allows you to ignore failing bridges on startup.
+#Matterbridge will disable the failed bridge and continue with the other ones.
+#Context: https://github.com/42wim/matterbridge/issues/455
+#OPTIONAL (default false)
+IgnoreFailureOnStart=false
+
+#LogFile defines the location of a file to write logs into, rather
+#than stdout.
+#Logging will still happen on stdout if the file cannot be open for
+#writing, or if the value is empty. Note that the log won't roll, so
+#you might want to use logrotate(8) with this feature.
+#OPTIONAL (default empty)
+#LogFile="/var/log/matterbridge.log"
+
+
+###################################################################
+#Gateway configuration
+###################################################################
+
+#You can specify multiple gateways using [[gateway]]
+#Each gateway has a [[gateway.in]] and a [[gateway.out]]
+#[[gateway.in]] specifies the account and channels we will receive messages from.
+#[[gateway.out]] specifies the account and channels we will send the messages
+#from [[gateway.in]] to.
+#
+#Most of the time [[gateway.in]] and [[gateway.out]] are the same if you
+#want bidirectional bridging. You can then use [[gateway.inout]]
+#
+
+[[gateway]]
+name="mygateway"
+enable=true
+    [[gateway.inout]]
+    account="mattermost.test1"
+    channel="town-square"
+
+    [[gateway.inout]]
+    account="mattermost.test2"
+    channel="town-square"

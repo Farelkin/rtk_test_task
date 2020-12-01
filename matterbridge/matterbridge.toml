@@ -3,35 +3,61 @@
 NoTLS = true
 
 Server = "mm-1:8065"
-Login = "user1_host1"
-Password = "user1_password"
+Login = "host2"
+Password = "123456"
+#Token="cact1963hfg5mp489hj1kyfswc"
 
 Team = "rtk"
 
-RemoteNickFormat = "[{PROTOCOL}] <{NICK}>"
+SkipTLSVerify=true
+RemoteNickFormat="[{BRIDGE}] {NICK}: "
 PrefixMessagesWithNick = true
 
-#[mattermost.bridge_user2]
+[mattermost.bridge_user2]
+NoTLS = true
+
+Server = "mm-2:8065"
+Login = "host1"
+Password = "123456"
+#Token="zxj1fkpbe3ns8cqp37zszqjmah"
+
+Team = "rtk"
+
+SkipTLSVerify=true
+RemoteNickFormat="[{BRIDGE}] {NICK}: "
+PrefixMessagesWithNick = true
+
+#[mattermost.bot]
 #NoTLS = true
 #
 #Server = "mm-2:8065"
-#Login = "user1_host2"
-#Password = "user2_password"
+#Login = "bot_test"
+##Password = "123456"
+#Token="gffsqd9dhj86t8s89wdhksurnr"
 #
-#Team = "rtk"
+#Team = "rtk2"
 #
-#RemoteNickFormat = "[{PROTOCOL}] <{NICK}>"
+#SkipTLSVerify=true
+#RemoteNickFormat="[{BRIDGE}] {NICK}: "
 #PrefixMessagesWithNick = true
 
+[general]
+RemoteNickFormat="[{PROTOCOL}] <{NICK}> "
+StripNick=false
+IgnoreFailureOnStart=false
 
 [[gateway]]
 name = "mygateway"
 enable = true
 
-[[gateway.inout]]
-account = "mattermost.bridge_user1"
-channel = "off-topic"
+    [[gateway.inout]]
+    account = "mattermost.bridge_user1"
+    channel = "town-square"
 
-#[[gateway.inout]]
-#account = "mattermost.bridge_user2"
-#channel = "off-topic"
+    [[gateway.inout]]
+    account = "mattermost.bridge_user2"
+    channel = "town-square"
+
+#    [[gateway.inout]]
+#    account = "mattermost.bot"
+#    channel = "town-square"
